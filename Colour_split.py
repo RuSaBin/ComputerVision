@@ -6,7 +6,7 @@ Created on Thu Nov 29 17:36:07 2018
 """
 
 # Official website https://opencv.org/
-# Installation through Anaconda https://www.learnopencv.com/install-opencv-3-and-dlib-on-windows-python-only/
+# Install OpenCV instructions: https://pypi.org/project/opencv-python/
 import cv2
 
 import numpy as np
@@ -37,54 +37,69 @@ image_rgb = cv2.merge([r,g,b])
 
 '''
 plt.pie([10, 20, 30, 40], labels =['black', 'yellow', 'green', 'red'] , colors = ['#FF00FF', '#00FFFF', '#FF0000', '#808000'], startangle = 90)
-# plt.subplot(122);plt.imshow(img2)
+# plt.subplot(122);plt.imshow(pixel_list_image_rgb)
 '''
+
 # reduce dimensions leaving only list of pixels with rgb values
-img2 = image_rgb.reshape(-1, 3)
+pixel_list_image_rgb = image_rgb.reshape(-1, 3)
 
+'''
+cv2.imwrite('poster2.jpg', pixel_list_image_rgb)
+'''
 
-cv2.imwrite('poster2.jpg', img2)
+# we input plain list of pixel RGB values, without coordinates to create a covariance matrix for all image colour values
+covariance = np.cov(pixel_list_image_rgb,  rowvar=False)
 
-cov = np.cov(img2,  rowvar=False)
-
-eigvals, eigvecs = np.linalg.eig(cov)
+# 
+eigvals, eigvecs = np.linalg.eig(covariance)
 ind = np.argmax(eigvals)
 eigenvector = eigvecs[ind]
 '''
-R = img2.T[0]
-G = img2.T[1]
-B = img2.T[2]
+R = pixel_list_image_rgb.T[0]
+G = pixel_list_image_rgb.T[1]
+B = pixel_list_image_rgb.T[2]
 '''
-
-img_test = original_image_bgr
+# We create a new image to apply colour segmentation on
+image_bgr_colour_reduction = original_image_bgr
 
 
 mean_pixel = np.array([r.mean(), g.mean(), b.mean()])
 
 cof = mean_pixel@eigenvector
 
+# DIVIDE PIXELS BY EIGENVALUE
+#
+#
+
+# coords
 C1 = []
+# RGB values
 pixels1 = []
 C2 = []
 pixels2 = []
 
-for i in range(image_rgb.shape[0]):
-    for j in range(image_rgb.shape[1]):
-        pixel = image_rgb[i,j]
+
+# x,y pixel coordinates in an image (2D)
+for x in range(image_rgb.shape[0]):
+    for y in range(image_rgb.shape[1]):
+        pixel = image_rgb[x,y]
         num = pixel@eigenvector
         if num>= cof:
-            C1.append((i,j))
+            C1.append((x,y))
             pixels1.append(pixel)
-            img_test[i,j]= [0,0,0]
+            image_bgr_colour_reduction[x,y]= [0,0,0]
         else:
-            C2.append((i,j)) 
-            img_test[i,j]= [255,255,255]
+            C2.append((x,y)) 
+            image_bgr_colour_reduction[x,y]= [255,255,255]
             pixels2.append(pixel)
  
-R1= pixels1.T           
+'''R1= pixels1.T      '''     
 
         
-plt.imshow(img_test)  
+plt.imshow(image_bgr_colour_reduction)  
+
+
+
 
 
 class Tree(object):
