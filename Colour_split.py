@@ -39,9 +39,9 @@ image_rgb = cv2.merge([r,g,b])
 plt.pie([10, 20, 30, 40], labels =['black', 'yellow', 'green', 'red'] , colors = ['#FF00FF', '#00FFFF', '#FF0000', '#808000'], startangle = 90)
 # plt.subplot(122);plt.imshow(img2)
 '''
-
-
+# reduce dimensions leaving only list of pixels with rgb values
 img2 = image_rgb.reshape(-1, 3)
+
 
 cv2.imwrite('poster2.jpg', img2)
 
