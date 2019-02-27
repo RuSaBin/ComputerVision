@@ -52,8 +52,8 @@ covariance = np.cov(pixel_list_image_rgb,  rowvar=False)
 
 # 
 eigvals, eigvecs = np.linalg.eig(covariance)
-ind = np.argmax(eigvals)
-eigenvector = eigvecs[ind]
+index_eigvec = np.argmax(eigvals)
+eigenvector = eigvecs[index_eigvec]
 '''
 R = pixel_list_image_rgb.T[0]
 G = pixel_list_image_rgb.T[1]
@@ -98,9 +98,20 @@ for x in range(image_rgb.shape[0]):
         
 plt.imshow(image_bgr_colour_reduction)  
 
+# create tree with one node - all pixels
+import trees_class as trees
+newTree = trees.Tree(pixel_list_image_rgb)
+
+#split tree branches until (??)
+while True:
+    maxNode = newTree.findMaxNode()
+    if (maxNode.eigenvalue<10000000):
+        break        
+    maxNode.split()    
 
 
 
+'''
 
 class Tree(object):
     def __init__(self):
@@ -117,7 +128,7 @@ class Tree(object):
         root.right.data = "right" 
         return 'instance method called', self
         
-        
+'''        
 
             
         
