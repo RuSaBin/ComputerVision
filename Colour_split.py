@@ -5,30 +5,43 @@ Created on Thu Nov 29 17:36:07 2018
 @author: rutab
 """
 
+# Official website https://opencv.org/
+# Installation through Anaconda https://www.learnopencv.com/install-opencv-3-and-dlib-on-windows-python-only/
 import cv2
+
 import numpy as np
+
 import matplotlib.pyplot as plt
 
-img = cv2.imread('./poster1.jpg')
 
-type(img)
+# IMPORT IMAGE
+original_image_bgr = cv2.imread('./poster1.jpg')
+
+
+"""
+type(original_image_bgr)
 plt.subplot(121)
 
-plt.imshow(img)
-# convert to rgb
+plt.imshow(original_image_bgr)
+"""
 
-b,g,r = cv2.split(img)
-img = cv2.merge([r,g,b])
+# COLOUR SPLIT ALGORITHM (BATMAN)
+# 
+#
 
+# CONVERT TO RGB
+# cv2 imports image as BGR, so we convert to RGB for convenience
 
+b,g,r = cv2.split(original_image_bgr)
+image_rgb = cv2.merge([r,g,b])
 
+'''
 plt.pie([10, 20, 30, 40], labels =['black', 'yellow', 'green', 'red'] , colors = ['#FF00FF', '#00FFFF', '#FF0000', '#808000'], startangle = 90)
-
-
-
 # plt.subplot(122);plt.imshow(img2)
+'''
 
-img2 = img.reshape(-1, 3)
+
+img2 = image_rgb.reshape(-1, 3)
 
 cv2.imwrite('poster2.jpg', img2)
 
@@ -37,12 +50,14 @@ cov = np.cov(img2,  rowvar=False)
 eigvals, eigvecs = np.linalg.eig(cov)
 ind = np.argmax(eigvals)
 eigenvector = eigvecs[ind]
-
+'''
 R = img2.T[0]
 G = img2.T[1]
 B = img2.T[2]
+'''
 
-img_test = img
+img_test = original_image_bgr
+
 
 mean_pixel = np.array([r.mean(), g.mean(), b.mean()])
 
@@ -53,9 +68,9 @@ pixels1 = []
 C2 = []
 pixels2 = []
 
-for i in range(img.shape[0]):
-    for j in range(img.shape[1]):
-        pixel = img[i,j]
+for i in range(image_rgb.shape[0]):
+    for j in range(image_rgb.shape[1]):
+        pixel = image_rgb[i,j]
         num = pixel@eigenvector
         if num>= cof:
             C1.append((i,j))
