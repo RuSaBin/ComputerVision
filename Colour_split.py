@@ -15,7 +15,7 @@ import matplotlib.pyplot as plt
 
 
 # IMPORT IMAGE
-original_image_bgr = cv2.imread('./poster1.jpg')
+original_image_bgr = cv2.imread('./test1.jpg')
 
 
 """
@@ -103,7 +103,13 @@ plt.imshow(image_bgr_colour_reduction)
 # create tree with one node - all pixels
 import trees_class as trees
 newTree = trees.Tree(pixel_list_image_rgb)
-# newTree.split()
+newTree.split()
+
+
+#import rutosklase
+#import mildosklase
+#rutosklase.run(pixels)
+#mildosklase.run()
 
 #split tree branches until (??)
 '''while True:

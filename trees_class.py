@@ -19,7 +19,7 @@ class Tree():
         self.pixels = pixels 
         self.eigenvector = None        
         self.eigenvalue = None
-        self.mean_colour = None
+        self.colour = None
         
         
         # constructor gets plain list of pixel RGB values, without coordinates
@@ -36,7 +36,7 @@ class Tree():
         r = np.array(self.pixels)[:,0] 
         g = np.array(self.pixels)[:,1] 
         b = np.array(self.pixels)[:,2]    
-        self.mean_colour = np.array([r.mean(), g.mean(), b.mean()])
+        self.colour = np.array([r.mean(), g.mean(), b.mean()])
     
 
 
@@ -44,10 +44,12 @@ class Tree():
     
     def split(self):
         
-        cof = self.mean_colour@self.eigenvector    
-        leftPixels =  np.full((0,3), 1)
-        rightPixels = np.full((0,3), 1) 
-          
+        cof = self.colour@self.eigenvector    
+        #leftPixels =  np.full((0,3), 1)
+        #rightPixels = np.full((0,3), 1) 
+        
+        leftPixels = []
+        rightPixels = []
  
         # SPLIT PIXELS BY EIGENVALUE
       
@@ -56,17 +58,24 @@ class Tree():
             num = self.pixels[i]@self.eigenvector
             
             if num>= cof:
-                leftPixels=np.vstack((leftPixels, self.pixels[i]))
+                #print(i)
+                #leftPixels=np.vstack((leftPixels, self.pixels[i]))
+                leftPixels.append(self.pixels[i])
             else:
-                rightPixels=np.vstack((rightPixels, self.pixels[i]))
+                #print(i)
+                #rightPixels=np.vstack((rightPixels, self.pixels[i]))
+                rightPixels.append(self.pixels[i])
         
-        print("shape l")       
-        print(leftPixels.shape)
-        print("shape r")      
-        print(rightPixels.shape)
+        #print("shape l")       
+        #print(len(leftPixels))
+      
+        
+        #lp = np.asarray(leftPixels)
+          
+        #print(lp.shape)
                 
-        # self.left = Tree(leftPixels)
-        # self.right = Tree(rightPixels)
+        self.left = Tree(np.asarray(leftPixels))
+        self.right = Tree(np.asarray(rightPixels))
         
         return 'instance method called', self
     
