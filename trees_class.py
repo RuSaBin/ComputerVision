@@ -39,43 +39,64 @@ class Tree():
         self.mean_colour = np.array([r.mean(), g.mean(), b.mean()])
     
 
-    def max_var_leaf(self):
-        if self.left == None:
-            return self
-        else:
-            return 'hello'
+
     
     
     def split(self):
         
-        
-        cof = self.mean_colour@self.eigenvector
-        
+        cof = self.mean_colour@self.eigenvector    
+        leftPixels =  np.full((0,3), 1)
+        rightPixels = np.full((0,3), 1) 
+          
+ 
         # SPLIT PIXELS BY EIGENVALUE
-        #
-        #        
-        leftPixels = []
-        rightPixels = []        
+      
         for i in range(self.pixels.shape[0]):
+            
             num = self.pixels[i]@self.eigenvector
+            
             if num>= cof:
-                leftPixels.append(self.pixels[i])
+                leftPixels=np.vstack((leftPixels, self.pixels[i]))
             else:
-                rightPixels.append(self.pixels[i])
+                rightPixels=np.vstack((rightPixels, self.pixels[i]))
         
-        # create new branches for the split node
-        self.left = Tree(leftPixels)
-        self.right = Tree(rightPixels)
+        print("shape l")       
+        print(leftPixels.shape)
+        print("shape r")      
+        print(rightPixels.shape)
+                
+        # self.left = Tree(leftPixels)
+        # self.right = Tree(rightPixels)
         
         return 'instance method called', self
+    
+    
+    def getAllNodes(self):
+        
+        nodesArray = np.array([])
+        
+        #check if this is a node and append it, or it's nodes
+        if (self.left is not None ) and (self.right is not None ):
+            nodesArray += self.left.getAllNodes()
+            nodesArray += self.right.getAllNodes()
+        
+        else:
+            nodesArray += self
+            
+        return nodesArray
+    
+    
+    
     
     # FIND THE NODE WITH THE BIGGEST EIGENVALUE (highest variety of colours)
     def findMaxNode(self):
         
         if (self.left is not None ) and (self.right is not None ):
-            if self.left.eigenvalue > self.right.eigenvalue:
-                return self.left
-            return self.right
+            if self.left.findMaxNode().eigenvalue > self.right.findMaxNode().eigenvalue:
+                return self.left.findMaxNode()
+            return self.right.findMaxNode()
         
         return self
+    
+    
         

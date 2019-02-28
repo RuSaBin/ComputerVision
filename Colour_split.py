@@ -43,6 +43,8 @@ plt.pie([10, 20, 30, 40], labels =['black', 'yellow', 'green', 'red'] , colors =
 # reduce dimensions leaving only list of pixels with rgb values
 pixel_list_image_rgb = image_rgb.reshape(-1, 3)
 
+pixels = image_rgb.reshape(-1, 3)
+
 '''
 cv2.imwrite('poster2.jpg', pixel_list_image_rgb)
 '''
@@ -101,13 +103,14 @@ plt.imshow(image_bgr_colour_reduction)
 # create tree with one node - all pixels
 import trees_class as trees
 newTree = trees.Tree(pixel_list_image_rgb)
+# newTree.split()
 
 #split tree branches until (??)
-while True:
+'''while True:
     maxNode = newTree.findMaxNode()
     if (maxNode.eigenvalue<10000000):
         break        
-    maxNode.split()    
+    maxNode.split() '''   
 
 
 
